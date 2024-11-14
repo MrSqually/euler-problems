@@ -1,5 +1,7 @@
 (ns euler-problems-clj.1-50
-  (:require [clojure.math :as math]))
+  (:require [euler-problems-clj.utils :as utils]
+            [clojure.math :as math]
+            [clojure.math.combinatorics :as combos]))
 
 ;;===========================================================================|
 ;; Problem One
@@ -81,7 +83,7 @@
   [])
 
 ;;===========================================================================|
-;; TODO Problem Five -- Smallest Multiple
+;; Problem Five -- Smallest Multiple
 (defn factorize [n]
   (loop [n n acc [1] primes (gen-primes)]
     (if (= n 1)
@@ -99,20 +101,21 @@
                 (assoc dict val 1)))
             d factors)))
 
-;; (f [{a 1 b 2 c 3} {a 2 b 1 c 3} {a 1 b 1 c 1}]) := {a 2 b 2 c 3}
-;; given a vector of dicts, return a dict with the maximum values for each key
-
 (defn problem-five
   "finds the smallest number evenly divisible
   by all integers from 1 to `upper-bound`"
-  [upper-bound])
+  [upper-bound]
+  (let [prime-dist (map prime-factorization  (range 1 upper-bound))
+        max-primes (reduce #(merge-with max %1 %2) prime-dist)]
+    (reduce * (map #(math/pow % (max-primes %)) (keys max-primes)))))
 
-(problem-five 10)  ;;EXPECTS -> 2520
-(problem-five 20)  ;;expects -> ??
+     
+(problem-five 10)
+(int (problem-five 20))
 
 ;;===========================================================================|
 ;; Problem Six -- Sum Square Difference
-(defn sum-sq-diff [lim]
+(defn problem-six [lim]
   (let [vals (range 1 (+ 1 lim))
         sqsum (math/pow (reduce + vals) 2)
         sumsq (reduce + (map #(math/pow % 2) vals))]
@@ -120,10 +123,24 @@
 
 ;;===========================================================================|
 ;; Problem Seven -- 10,001st Prime
-(nth (gen-primes) 10000)
+(defn problem-seven []
+  (nth (gen-primes) 10000))
 
 ;;===========================================================================|
 ;; TODO Problem Eight -- Largest Product in a Series
+
+(defn problem-eight [n l]
+  (let [d (digits n)]
+    (loop [factors (vec (take l d))
+           prod 0]
+      (if (nil? d)
+        prod
+        (let [new-prod (reduce * factors)
+              next (conj (rest factors) (first d))]
+          (if (> new-prod prod)
+            (recur next new-prod)
+            (recur next prod)))))))
+
 
 ;;===========================================================================|
 ;; TODO Problem Nine -- Special Pythagorean Triple
@@ -142,6 +159,7 @@
   [n]
   (reduce + (take n (iterate inc 1))))
 
+(triangle-number 7)
 ;; > 500 divisors
 
 ;;===========================================================================|
@@ -151,7 +169,10 @@
 ;; TODO Problem Fourteen
 
 ;;===========================================================================|
-;; TODO Problem Fifteen
+;; TODO Problem Fifteen - Lattice Paths
+(defn problem-15 [n d]
+  (quot (* (* n n) (* n (- n 1)))  d))
+
 
 ;;===========================================================================|
 ;; TODO Problem Sixteen
