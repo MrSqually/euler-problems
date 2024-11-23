@@ -109,7 +109,6 @@
         max-primes (reduce #(merge-with max %1 %2) prime-dist)]
     (reduce * (map #(math/pow % (max-primes %)) (keys max-primes)))))
 
-     
 (problem-five 10)
 (int (problem-five 20))
 
@@ -129,19 +128,6 @@
 ;;===========================================================================|
 ;; TODO Problem Eight -- Largest Product in a Series
 
-(defn problem-eight [n l]
-  (let [d (digits n)]
-    (loop [factors (vec (take l d))
-           prod 0]
-      (if (nil? d)
-        prod
-        (let [new-prod (reduce * factors)
-              next (conj (rest factors) (first d))]
-          (if (> new-prod prod)
-            (recur next new-prod)
-            (recur next prod)))))))
-
-
 ;;===========================================================================|
 ;; TODO Problem Nine -- Special Pythagorean Triple
 
@@ -154,13 +140,29 @@
 ;; TODO Problem Eleven --
 
 ;;===========================================================================|
-;; TODO Problem Twelve -- Highly Divisible Triangular Number
-(defn triangle-number
-  [n]
-  (reduce + (take n (iterate inc 1))))
+;; Problem Twelve -- Highly Divisible Triangular Number
+;; FIXME -> slow (?)
 
-(triangle-number 7)
-;; > 500 divisors
+(defn triangle-number [n]
+  (quot (* n (+ n 1)) 2))
+
+(defn triangle-sequence []
+  (lazy-seq
+   (for [n (iterate inc 1)]
+     (triangle-number n))))
+
+(defn is-div? [divisor n]
+  (if (= (mod n divisor) 0)
+    (if (= (quot n divisor) divisor) 1 2)
+    0))
+
+(defn count-divisors [n]
+  (reduce + (map #(is-div? % n) (range 1 (math/sqrt n)))))
+
+(defn problem-twelve [n]
+  (first (drop-while #(<= (count-divisors %) n) (triangle-sequence))))
+
+(problem-twelve 500)
 
 ;;===========================================================================|
 ;; TODO Problem Thirteen -- Large Sum
@@ -170,9 +172,6 @@
 
 ;;===========================================================================|
 ;; TODO Problem Fifteen - Lattice Paths
-(defn problem-15 [n d]
-  (quot (* (* n n) (* n (- n 1)))  d))
-
 
 ;;===========================================================================|
 ;; TODO Problem Sixteen
