@@ -1,8 +1,14 @@
+;; Project Euler --- Problems 1 - 10
+;; solutions by: Dean C.
+
+;;===========================================================================|
+;; Namespace Declaration
 (ns euler-problems.1-10
   (:require [euler-problems.core :as my]
             [clojure.math :as math]))
 
 ;;===========================================================================|
+;; Solutions
 
 ;;==================|
 (defn problem-one
@@ -31,9 +37,11 @@
        (last)))
 
 ;;==================|
+;; TODO
 (defn problem-four
   ""
   [])
+
 ;;==================|
 (defn prime-factorization [n]
   (let [factorize (fn [n]
@@ -71,21 +79,30 @@
 
 ;;==================|
 (defn problem-seven
-  ""
+  "Find the 10001st prime number"
   []
   (nth (my/lazy-generators :primes) 10000))
 
 ;;==================|
 (defn problem-eight
-  ""
-  [])
+  "find the `adj` adjacent digits
+  in `num` that have the greatest product"
+  [adj num])
 
 ;;==================|
-(defn problem-nine [])
+;;TODO
+(defn problem-nine
+  "there is exactly one Pythagorean triplet for which
+  a + b + c = `target`"
+  [target]
+  (loop [t (generate-triple)]
+    (if (= (+ a b c) target)
+      (* a b c)
+      (recur))))
 
 ;;==================|
 (defn problem-ten
-  ""
+  "find the sums of all prime integers below `upper-bound`"
   [upper-bound]
   (reduce + (take-while #(< % upper-bound) (my/lazy-generators :primes))))
 ;;===========================================================================|
