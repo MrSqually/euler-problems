@@ -11,6 +11,8 @@
 ;; Solutions
 
 ;;==================|
+;; Problem One
+
 (defn problem-one
   "find the sum of all multiples of 3 or 5 below UPPER-BOUND"
   [upper-bound]
@@ -19,6 +21,8 @@
     (reduce + (filter fizzbuzz? (range upper-bound)))))
 
 ;;==================|
+;; Problem Two
+
 (defn problem-two
   "find the sum of even fibonnaci numbers < UPPER-BOUND"
   [upper-bound]
@@ -28,12 +32,14 @@
        (reduce +)))
 
 ;;==================|
+;;Problem Three
+
 (defn problem-three
   "find the largest prime factor of UPPER-BOUND"
   [upper-bound]
   (->> (my/lazy-generators :primes)
-       (take-while #(< % (math/sqrt n)))
-       (filter #(= (mod n %) 0))
+       (take-while #(< % (math/sqrt upper-bound)))
+       (filter #(= (mod upper-bound %) 0))
        (last)))
 
 ;;==================|
@@ -85,21 +91,24 @@
 
 ;;==================|
 (defn problem-eight
-  "find the `adj` adjacent digits
-  in `num` that have the greatest product"
-  [adj num])
+  "find the value of the largest 13
+  adjacent element product in the list"
+  [adj num]
+  (let [[h t] (split-at adj num)
+        m (reduce * h)
+        stepfn (fn [[tot xs] el]
+                 (let [ys (conj (vec (rest xs)) el)
+                       out (reduce * ys)]
+                   (if (>= out tot) [out ys] [tot xs])))]
+    (first (reduce stepfn [m h] t))))
+
+(problem-eight
+ 13
+ (->> "resource/p8/number.txt" slurp vec (map #(Character/digit % 10))))
 
 ;;==================|
-;;TODO
-(defn problem-nine
-  "there is exactly one Pythagorean triplet for which
-  a + b + c = `target`"
-  [target]
-  (loop [t (generate-triple)]
-    (if (= (+ a b c) target)
-      (* a b c)
-      (recur))))
-
+;; TODO
+(defn problem-nine [])
 ;;==================|
 (defn problem-ten
   "find the sums of all prime integers below `upper-bound`"

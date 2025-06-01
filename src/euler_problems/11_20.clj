@@ -1,7 +1,17 @@
 (ns euler-problems.11-20
-  (:require [clojure.math :as math]))
+  (:require [clojure.math :as math]
+            [clojure.string :as str]))
 
 ;; ========================|
+
+(defn grid-init []
+  (mapv (fn [r] (-> r
+                    (str/split #" ")
+                    ((fn [x] (mapv #(Integer/parseInt %) x)))))
+        (-> "resource/p11/grid.txt" slurp (str/split #"\n"))))
+
+(defn problem-eleven
+  [grid])
 
 ;; ========================|
 (defn triangle-number [n]

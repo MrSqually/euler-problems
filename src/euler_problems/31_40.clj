@@ -1,7 +1,18 @@
 (ns euler-problems.31-40
-  (:require [clojure.math :as math]
+  (:require [clojure.math.combinatorics :as cmb]
             [euler-problems.core :as my]))
 
+;; Problem 31
+
+(defn problem-31 [])
+
+;; Problem 32
+
+(defn problem-32 [])
+
+;; Problem 36
+
+;; Problem 37
 (defn rl-trunc [n]
   (take-while #(< 0 %) (iterate #(quot % 10) n)))
 
@@ -21,3 +32,5 @@
 
 (defn problem-37 []
   (transduce prime-trunc + (my/lazy-generators :primes)))
+
+;; Problem 38
