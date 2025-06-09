@@ -25,6 +25,24 @@
                       :primes (prime-generator)
                       :integers (iterate inc 1)})
 
+;; Helper Fns
+(defn prime-factorization [n]
+  (let [factorize (fn [n]
+                    (loop [n n acc [1] primes (lazy-generators :primes)]
+                      (if (= n 1)
+                        acc
+                        (let [p (first primes)]
+                          (if (= 0 (mod n p))
+                            (recur (quot n p) (conj acc p) primes)
+                            (recur n acc (rest primes)))))))
+        factors (factorize n)
+        d {}]
+    (reduce (fn [res inp]
+              (if (res inp)
+                (assoc res inp (inc (res inp)))
+                (assoc res inp 1)))
+            d factors)))
+
 ;; Predicates
 (defn prime? [n]
   (every? #(not (zero? (mod n %))) (take-while #(< % (math/sqrt n)) (prime-generator))))
